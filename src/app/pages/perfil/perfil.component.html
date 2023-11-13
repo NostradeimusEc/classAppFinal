@@ -1,0 +1,70 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title class="subtitulo">Perfil</ion-title>
+    <ion-buttons slot="start">
+      <ion-button (click)="openMenu()">
+        <ion-icon color="primary" slot="icon-only" name="menu"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <h3 class="subtitulo encabezado">Ingrese datos del alumno</h3>
+  <ion-item>
+    <ion-label class="normal" position="floating">
+      Email:
+    </ion-label>
+    <ion-input [(ngModel)]="alumno.email" class="normal" type="text" inputmode="text">
+    </ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label class="normal" position="floating">
+      Nombre:
+    </ion-label>
+    <ion-input [(ngModel)]="alumno.nombre" class="normal" type="text" inputmode="text">
+    </ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label class="normal" position="floating">
+      Seccion:
+    </ion-label>
+    <ion-input [(ngModel)]="alumno.seccion" class="normal" type="text" inputmode="text">
+    </ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label class="normal" position="floating">
+      Password:
+    </ion-label>
+    <ion-input [(ngModel)]="alumno.password" class="normal" type="text" inputmode="text">
+    </ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label class="normal">
+      Foto:
+    </ion-label>
+    <ion-buttons slot="end">
+      <ion-button>
+        <label for="file-upload">
+          <ion-icon slot="icon-only" name="images" color="primary"></ion-icon>
+        </label>
+        <input (change)="newImageUpload($event)" id="file-upload" style="display: none" type="file" accept="image/*">
+      </ion-button>
+    </ion-buttons>
+  </ion-item>
+  <ion-item>
+    <img class="image" [src]="alumno.foto">
+  </ion-item>
+
+  <div style=" text-align: end; margin: 10px;">
+    <ion-button (click)="registrarr()" class="normal" color="primary">Registrar</ion-button>
+  </div>
+
+  <div style=" text-align: end; margin: 10px;">
+    <ion-button (click)="salir()" class="normal" color="primary">Salir</ion-button>
+  </div>
+
+
+</ion-content>
