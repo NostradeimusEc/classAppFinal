@@ -9,6 +9,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { PagesModule } from './pages/pages.module';
 import { BackendModule } from './backend/backend.module';
 
+
 // ===== Firebase =====
 import { AngularFireModule } from '@angular/fire/compat';
 import { environment } from 'src/environments/environment';
@@ -30,7 +31,8 @@ import { AngularFireAuthModule } from '@angular/fire/compat/auth';
     AngularFireStorageModule,
     AngularFireAuthModule
   ],
-  providers: [{ provide: RouteReuseStrategy, useClass: IonicRouteStrategy }],
+  providers: [{ provide: RouteReuseStrategy, 
+    useClass: IonicRouteStrategy,}],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

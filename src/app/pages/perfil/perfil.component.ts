@@ -36,8 +36,6 @@ export class PerfilComponent  implements OnInit {
   }
 
 
-
-
   openMenu() {
     console.log('open menu');
     this.menucontroler.toggle('principal');
