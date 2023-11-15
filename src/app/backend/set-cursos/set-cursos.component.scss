@@ -1,4 +1,28 @@
 
+@import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100;0,400;0,600;1,100&display=swap');
+
+.titulo {
+    font-family: 'Raleway', sans-serif;
+    font-size: 25px;
+    font-weight: bold;
+    color: midnightblue;
+
+}
+
+
+.subtitulo{
+    font-family: 'Raleway', sans-serif;
+    font-size: 18px;
+    font-weight: bold;
+    color: black;
+}
+
+
+.normal {
+    font-family: 'Raleway', sans-serif;
+    font-size: 14px;
+    color: black;
+}
 
 .encabezado {
     background-color: silver;

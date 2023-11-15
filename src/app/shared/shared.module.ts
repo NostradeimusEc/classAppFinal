@@ -17,6 +17,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
   exports: [ 
     HeaderComponent,
     CustomInputComponent,
+    ReactiveFormsModule,
     LogoComponent
   ],
   imports: [

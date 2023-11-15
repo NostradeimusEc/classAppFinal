@@ -21,7 +21,7 @@ import { AngularFireAuthModule } from '@angular/fire/compat/auth';
   declarations: [AppComponent],
   imports: [
     BrowserModule, 
-    IonicModule.forRoot(), 
+    IonicModule.forRoot({mode: 'md'}), 
     BackendModule, 
     AppRoutingModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
