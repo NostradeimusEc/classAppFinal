@@ -4,8 +4,6 @@ import { Curso } from 'src/app/models';
 import { FirestorageService } from 'src/app/services/firestorage.service';
 import { FirestoreService } from 'src/app/services/firestore.service';
 
-
-
 @Component({
   selector: 'app-set-cursos',
   templateUrl: './set-cursos.component.html',
@@ -134,8 +132,6 @@ export class SetCursosComponent implements OnInit {
         reader.readAsDataURL(event.target.files[0]);
     }
   }
-
-
 
 
 }
