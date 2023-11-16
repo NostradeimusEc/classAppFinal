@@ -1,12 +1,13 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class FirestoreService {
 
-
+  
   //================= Base de Datos =================
 
   constructor(public database: AngularFirestore) { }

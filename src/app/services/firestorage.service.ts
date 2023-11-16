@@ -9,6 +9,7 @@ export class FirestorageService {
 
   constructor(public storage: AngularFireStorage) { }
 
+  //======= Cargar Imágenes ===============
 
 uploadImage(file: any, path: string, nombre: string):  Promise<string> {
      return new Promise( resolve=> {
