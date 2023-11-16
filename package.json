@@ -25,15 +25,16 @@
     "@capacitor/angular": "^2.0.3",
     "@capacitor/camera": "^5.0.7",
     "@capacitor/cli": "^5.5.1",
+    "@capacitor/core": "latest",
     "@capacitor/splash-screen": "^5.0.6",
     "@capacitor/status-bar": "^5.0.6",
     "@ionic/angular": "^7.5.4",
+    "@ionic/pwa-elements": "^3.2.2",
     "firebase": "^10.6.0",
     "ionicons": "^7.0.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
-    "zone.js": "~0.13.0",
-    "@capacitor/core": "latest"
+    "zone.js": "~0.13.0"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^16.0.0",
@@ -45,6 +46,7 @@
     "@angular/cli": "^16.0.0",
     "@angular/compiler-cli": "^16.0.0",
     "@angular/language-service": "^16.0.0",
+    "@capacitor/cli": "latest",
     "@ionic/angular-toolkit": "^9.0.0",
     "@types/jasmine": "~4.3.0",
     "@types/node": "^12.11.1",
@@ -63,8 +65,7 @@
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.0.0",
     "ts-node": "^8.3.0",
-    "typescript": "~5.0.2",
-    "@capacitor/cli": "latest"
+    "typescript": "~5.0.2"
   },
   "description": "An Ionic project"
 }

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { SetCursosComponent } from './set-cursos/set-cursos.component';
 import { IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
+import { SharedModule } from '../shared/shared.module';
 
 
 
@@ -13,7 +14,8 @@ import { FormsModule } from '@angular/forms';
   imports: [
     CommonModule,
     IonicModule,
-    FormsModule
+    FormsModule,
+    SharedModule
   ]
 })
 export class BackendModule { }

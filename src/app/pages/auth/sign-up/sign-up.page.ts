@@ -5,15 +5,17 @@ import { FirebaseauthService } from 'src/app/services/firebaseauth.service';
 import { UtilsService } from 'src/app/services/utils.service';
 
 @Component({
-  selector: 'app-auth',
-  templateUrl: './auth.page.html',
-  styleUrls: ['./auth.page.scss'],
+  selector: 'app-sign-up',
+  templateUrl: './sign-up.page.html',
+  styleUrls: ['./sign-up.page.scss'],
 })
-export class AuthPage implements OnInit {
+export class SignUpPage implements OnInit {
 
   form = new FormGroup({
+    uid: new FormControl(''),
     email: new FormControl('', [Validators.required, Validators.email]),
-    password: new FormControl('', [Validators.required])
+    password: new FormControl('', [Validators.required]),
+    name:  new FormControl('', [Validators.required, Validators.minLength(4)])
   })
 
   firebaseauthSvc = inject(FirebaseauthService);
@@ -29,10 +31,15 @@ export class AuthPage implements OnInit {
       await loading.present();
 
 
-      this.firebaseauthSvc.signIn(this.form.value as User).then(res => {
-          
-        this.getUserInfo(res.user.uid);
+      this.firebaseauthSvc.signUp(this.form.value as User).then(async res => {
 
+        await  this.firebaseauthSvc.updateUser(this.form.value.name);
+
+        let uid = res.user.uid;
+        this.form.controls.uid.setValue(uid);
+
+        this.setUserInfo(uid);
+          
       }).catch(error => {
         console.log(error);
 
@@ -50,28 +57,21 @@ export class AuthPage implements OnInit {
     }
   }
 
-
-  async getUserInfo(uid: string) {
+  async setUserInfo(uid: string) {
     if (this.form.valid) {
 
       const loading = await this.utilsSvc.loading();
       await loading.present();
 
       let path = `users/${uid}`;
+      delete this.form.value.password;
 
-      this.firebaseauthSvc.getDocument(path).then((user: User) => {
+      this.firebaseauthSvc.setDocument(path, this.form.value).then(async res => {
 
-        this.utilsSvc.saveInlocalStorage('user', user);
+        this.utilsSvc.saveInlocalStorage('user', this.form.value);
         this.utilsSvc.routerlink('/main/home');
         this.form.reset();
 
-        this.utilsSvc.presentToast({
-          message: `Te damos la bienvenida ${user.name}`,
-          duration: 2000,
-          color: 'primary',
-          position: 'middle',
-          icon: 'person-circle-outline'
-      })
           
       }).catch(error => {
         console.log(error);
@@ -89,5 +89,6 @@ export class AuthPage implements OnInit {
       })
     }
   }
+
 
 }
