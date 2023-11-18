@@ -3,8 +3,10 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, updateProfile, sendPasswordResetEmail } from 'firebase/auth';
 import { User } from '../models/models';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { getFirestore, setDoc, doc, getDoc } from '@angular/fire/firestore';
+import { getFirestore, setDoc, doc, getDoc, addDoc, collection, collectionData, query} from '@angular/fire/firestore';
 import { UtilsService } from './utils.service';
+import { AngularFireStorage } from '@angular/fire/compat/storage';
+import { getStorage, uploadString, ref, getDownloadURL } from "firebase/storage";
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +15,7 @@ export class FirebaseauthService {
 
   auth = inject(AngularFireAuth);
   firestore = inject(AngularFirestore);
+  storage = inject(AngularFireStorage);
   utilsSvc = inject(UtilsService);
 
   //================= Autenticación =================
@@ -48,6 +51,13 @@ export class FirebaseauthService {
   }
 
   //==================== Base de Datos ==============
+  
+  //========= Obtener documentos de una coleccion ==========
+  getCollectionData(path: string, collectionQuery?: any){
+    const ref = collection(getFirestore(),path);
+    return collectionData(query(ref, collectionQuery))
+  }
+
 
   //========= Setear un documento ==========
   setDocument(path: string, data: any){
@@ -59,5 +69,17 @@ export class FirebaseauthService {
     return (await getDoc(doc(getFirestore(),path))).data();
   }
   
+  //========= Agregar un documento ==========
+  addDocument(path: string, data: any){
+    return addDoc(collection(getFirestore(),path),data);
+  }
+
+  //========= Almacenamiento ==========
+  async uploadImage(path: string, data_url: string){
+    return uploadString(ref(getStorage(),path), data_url,'data_url').then(() =>{
+      return getDownloadURL(ref(getStorage(), path))
+    })
+  }
+
 
 }

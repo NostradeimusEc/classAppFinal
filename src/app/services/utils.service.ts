@@ -11,13 +11,15 @@ export class UtilsService {
   toastCtrl = inject(ToastController);
   router = inject(Router);
 
- async takePicture(promptLabelPicture: string) {
+ async takePicture(promptLabelHeader: string) {
   return await Camera.getPhoto({
     quality: 90,
     allowEditing: true,
     resultType: CameraResultType.DataUrl,
-    source: CameraSource.Camera,
-    promptLabelPicture: 'Escanea'
+    source: CameraSource.Prompt,
+    promptLabelHeader,
+    promptLabelPhoto: 'Selecciona una imagen',
+    promptLabelPicture: 'Toma una foto'
   });
 
 };
