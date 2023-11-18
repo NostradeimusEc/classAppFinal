@@ -23,6 +23,18 @@
             <div *ngIf="form.controls.name.errors?.['minlenght']">El nombre debe tener al menos 4 caracteres</div>
         </div>
 
+         <!--========= Profile ==========-->
+         <app-custom-input 
+         autocomplete="profile"
+         icon="people-outline"
+         [control]="form.controls.profile"
+         type="text"
+         label="Profile [alumno | profesor]"
+         ></app-custom-input>
+ 
+         <div class="validators" *ngIf="form.controls.profile.errors && form.controls.profile.touched">
+             <div *ngIf="form.controls.profile.errors?.['required']">Este campo es requerido</div>
+         </div>
 
         <!--========= Email ==========-->
         <app-custom-input 

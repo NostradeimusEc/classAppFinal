@@ -24,7 +24,6 @@ export class UtilsService {
 
 };
 
-
   // ======== Loading ========
   loading() {
     return this.loadingCtrl.create({ spinner: 'crescent' })

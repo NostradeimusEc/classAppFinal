@@ -16,7 +16,6 @@ import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { AngularFireStorageModule } from '@angular/fire/compat/storage';
 import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 
-
 @NgModule({
   declarations: [AppComponent],
   imports: [

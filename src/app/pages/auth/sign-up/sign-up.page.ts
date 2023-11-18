@@ -4,6 +4,7 @@ import { User } from 'src/app/models/models';
 import { FirebaseauthService } from 'src/app/services/firebaseauth.service';
 import { UtilsService } from 'src/app/services/utils.service';
 
+
 @Component({
   selector: 'app-sign-up',
   templateUrl: './sign-up.page.html',
@@ -15,7 +16,14 @@ export class SignUpPage implements OnInit {
     uid: new FormControl(''),
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [Validators.required]),
-    name:  new FormControl('', [Validators.required, Validators.minLength(4)])
+    name:  new FormControl('', [Validators.required, Validators.minLength(4)]),
+    profile: new FormControl('', [Validators.required,(control) => {
+      const value = control.value;
+      if (value !== 'alumno' && value !== 'profesor') {
+        return { oneOf: true };
+      }
+      return null;
+    }])
   })
 
   firebaseauthSvc = inject(FirebaseauthService);
@@ -69,7 +77,12 @@ export class SignUpPage implements OnInit {
       this.firebaseauthSvc.setDocument(path, this.form.value).then(async res => {
 
         this.utilsSvc.saveInlocalStorage('user', this.form.value);
-        this.utilsSvc.routerlink('/main/home');
+        this.utilsSvc.presentToast({
+          message: 'Usuario registrado con éxito',
+          duration: 1500,
+          color: 'light',
+          position: 'bottom'
+        });
         this.form.reset();
 
           
