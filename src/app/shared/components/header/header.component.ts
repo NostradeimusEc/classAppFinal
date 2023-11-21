@@ -1,5 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, inject } from '@angular/core';
 import { MenuController } from '@ionic/angular';
+import { UtilsService } from 'src/app/services/utils.service';
 
 @Component({
   selector: 'app-header',
@@ -10,10 +11,16 @@ export class HeaderComponent  implements OnInit {
 
   @Input() title!: string;
   @Input() backButton!: string;
+  @Input() isModal!: boolean;
 
-  constructor(public menucontroler: MenuController,) { }
+  utilsSvc = inject(UtilsService);
+  menucontroler = inject(MenuController); 
 
   ngOnInit() {}
+
+  dismissModal(){
+    this.utilsSvc.dismissModal();
+  }
 
   openMenu() {
     console.log('open menu');

@@ -1,8 +1,8 @@
 export interface Curso {
     nombre: string;
     seccion: string;
-    sala: string;
     foto: string;
+    sala: string;
     id: string;
 }
 

@@ -1,81 +1,71 @@
-
-<app-header title="Registro de Cursos"></app-header>
+<app-header [isModal]="true" title="Registro de Cursos"></app-header>
 
 <ion-content>
 
-  <div style=" text-align: end; margin: 10px;">
-    <ion-button (click)="nuevo()" class="normal" color="primary">Nuevo</ion-button>
-  </div>
+ 
+  <form [formGroup]="form" class="ion-padding ion-text-center" (ngSubmit)="submit()" (keypress.enter)="submit()">
+         
+    <!-- ====== si existe una imagen  ====== -->
+    <ion-avatar *ngIf="form.value.foto">
+      <img [src]="form.value.foto" />
+    </ion-avatar>
 
-  <div *ngIf="enableNewCurso">
+    <!-- ====== si no existe una imagen =======-->
+    <ion-icon class="imagen-icon" *ngIf="!form.value.foto" name="image-outline"></ion-icon>
 
-    <ion-item>
-      <ion-buttons slot="end">
-        <ion-button (click)="enableNewCurso = false;">
-          <ion-icon slot="icon-only" color="danger" name="close"></ion-icon>
-        </ion-button>
-        <ion-button (click)="guardarClase()">
-          <ion-icon slot="icon-only" color="primary" name="save-sharp"></ion-icon>
-        </ion-button>
-      </ion-buttons>
-    </ion-item>
-    <h3 class="subtitulo encabezado">Ingrese datos de la Clase</h3>
-    <ion-item>
-      <ion-label class="normal" position="floating">
-        Nombre:
-      </ion-label>
-      <ion-input [(ngModel)]="newCurso.nombre" class="normal" type="text" inputmode="text">
-      </ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label class="normal" position="floating">
-        Seccion:
-      </ion-label>
-      <ion-input [(ngModel)]="newCurso.seccion" class="normal" type="text" inputmode="text">
-      </ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label class="normal" position="floating">
-        Sala:
-      </ion-label>
-      <ion-input [(ngModel)]="newCurso.sala" class="normal" type="text" inputmode="text">
-      </ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label class="normal">
-        Foto:
-      </ion-label>
-      <ion-buttons slot="end">
-        <ion-button>
-          <label for="file-upload">
-            <ion-icon slot="icon-only" name="images" color="primary"></ion-icon>
-          </label>
-          <input (change)="newImageUpload($event)" id="file-upload" style="display: none" type="file" accept="image/*">
-        </ion-button>
-      </ion-buttons>
-    </ion-item>
-    <ion-item>
-      <img class="image" [src]="newCurso.foto">
-    </ion-item>
 
-  </div>
+    <br>
+    <!--  ======== Tomar/Seleccionar una imagen =========  -->
+    <ion-button (click)="takeImage()" mode="ios" size="small" shape="round">
+      Tomar/Seleccionar
+    </ion-button>
 
-  <ion-card>
 
-    <h3 class="subtitulado encabezado">Lista de Cursos</h3>
+    <!--========= Name ==========-->
+    <app-custom-input 
+    autocomplete="name"
+    [control]="form.controls.name"
+    type="text"
+    label="Nombre"
+    ></app-custom-input>
 
-    <ion-item *ngFor="let curso of cursos">
-      <ion-label class="normal">{{curso.nombre}}</ion-label>
-      <ion-buttons slot="end">
-        <ion-button (click)=" newCurso = curso; enableNewCurso = true; ">
-          <ion-icon slot="icon-only" color="primary" name="create"></ion-icon>
-        </ion-button>
-        <ion-button (click)="deleteCurso(curso)">
-          <ion-icon slot="icon-only" color="danger" name="trash-bin"></ion-icon>
-        </ion-button>
-      </ion-buttons>
-    </ion-item>
-  </ion-card>
+    <div class="validators" *ngIf="form.controls.name.errors && form.controls.name.touched">
+
+        <div *ngIf="form.controls.name.errors?.['required']">Este campo es requerido</div>
+        <div *ngIf="form.controls.name.errors?.['minlenght']">El nombre debe tener al menos 4 caracteres</div>
+    </div>
+
+    <!--========= seccion ==========-->
+    <app-custom-input 
+    [control]="form.controls.seccion"
+    type="text"
+    label="Seccion"
+    ></app-custom-input>
+
+    <div class="validators" *ngIf="form.controls.seccion.errors && form.controls.seccion.touched">
+
+        <div *ngIf="form.controls.seccion.errors?.['required']">Este campo es requerido</div>
+    </div>
+
+    <!--========= sala ==========-->
+    <app-custom-input 
+    [control]="form.controls.sala"
+    type="text"
+    label="Sala"
+    ></app-custom-input>
+
+    <div class="validators" *ngIf="form.controls.sala.errors && form.controls.sala.touched">
+
+        <div *ngIf="form.controls.sala.errors?.['required']">Este campo es requerido</div>
+    </div>
+
+    <ion-button mode="ios" class="ion-margin" type="submit" [disabled]="form.invalid">
+      Agregar Curso
+      <ion-icon slot="end" name="checkmark-circle-outline"></ion-icon>
+    </ion-button>
+
+
+</form>
 
 
 </ion-content>

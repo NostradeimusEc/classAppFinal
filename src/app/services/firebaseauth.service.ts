@@ -50,14 +50,13 @@ export class FirebaseauthService {
     return sendPasswordResetEmail(getAuth(),email)
   }
 
-  //==================== Base de Datos ==============
+  //==================== Base de Datos =========================
   
   //========= Obtener documentos de una coleccion ==========
   getCollectionData(path: string, collectionQuery?: any){
     const ref = collection(getFirestore(),path);
-    return collectionData(query(ref, collectionQuery))
+    return collectionData(query(ref, collectionQuery), {idField: 'id'});
   }
-
 
   //========= Setear un documento ==========
   setDocument(path: string, data: any){
@@ -74,7 +73,7 @@ export class FirebaseauthService {
     return addDoc(collection(getFirestore(),path),data);
   }
 
-  //========= Almacenamiento ==========
+  //===================== Almacenamiento ===========================
   async uploadImage(path: string, data_url: string){
     return uploadString(ref(getStorage(),path), data_url,'data_url').then(() =>{
       return getDownloadURL(ref(getStorage(), path))
