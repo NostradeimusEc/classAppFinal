@@ -29,7 +29,7 @@ export class HomePage implements OnInit {
 
   // ========= Obtener Cursos ==========
   getCursos(){
-    let path = `users/${this.user().uid}/path`;
+    let path = `users/${this.user().uid}/cursos`;
     
     let sub = this.firebaseauthSvc.getCollectionData(path).subscribe({
       next: (res: any) => {
@@ -40,18 +40,15 @@ export class HomePage implements OnInit {
     })
   }
 
-
-   //====== Cerrar Sesión =====
-   signOut(){
-    this.firebaseauthSvc.signOut();
-  }
-
   // ===== Agregar o actualizar un curso
-  addUpdateCurso() {
+ async addUpdateCurso(curso?: Curso) {
 
-    this.utilsSvc.presentModal({
+  let success = await  this.utilsSvc.presentModal({
       component: SetCursosComponent,
-      cssClass: 'add-update-modal'
+      cssClass: 'add-update-modal',
+      componentProps: { curso }
     })
+
+    if(success) this.getCursos(); 
   }
 }

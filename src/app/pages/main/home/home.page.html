@@ -3,18 +3,35 @@
 <ion-content>
 
   <ion-list>
-    <ion-item-sliding class="cursos-item" *ngFor="let c of cursos">
+    <ion-item-sliding class="curso-item" *ngFor="let c of cursos">
       <ion-item>
-        <ion-avatar  slot="start">
-          <img [src]="c.foto" />
+        <ion-avatar slot="start">
+          <img [src]="c.image" />
         </ion-avatar>
         <ion-label>
-          <div class="name">{{c.nombre}}</div>
+          <div class="name">{{c.name}}</div>
           <div class="data">
             <strong>Seccion:</strong>{{c.seccion}} <br>
           </div>
+          <div class="data">
+            <strong>Sala:</strong>{{c.sala}}
+          </div>
         </ion-label>
       </ion-item>
+
+      <!-- =============== Opciones de ADMIN ============== -->
+      <ion-item-options>
+      <!-- ========= Editar ======== -->
+        <ion-item-option (click)=" addUpdateCurso(c)">
+          <ion-icon class="option-btn" name="create-outline"></ion-icon>
+        </ion-item-option>
+
+      <!-- ========= Eliminar ======== -->  
+        <ion-item-option color="danger">
+          <ion-icon class="option-btn" name="trash-outline"></ion-icon>
+        </ion-item-option>
+      
+      </ion-item-options>
       
   
      
@@ -23,18 +40,10 @@
 
 
 
-  <ion-item button="true" detail="true" [routerLink]="[ '/set-cursos' ]" >
+  <ion-item>
     <ion-label (click)="addUpdateCurso()" class="normal">Registro de Cursos</ion-label>
     <ion-icon slot="start" name="desktop-outline"></ion-icon>
   </ion-item>
-
-
-
-  
-  <ion-button (click)="signOut()">
-    Cerrar Sesión
-  </ion-button>
-
 
 
 </ion-content>
