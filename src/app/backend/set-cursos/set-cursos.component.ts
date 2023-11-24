@@ -68,7 +68,7 @@ export class SetCursosComponent implements OnInit {
         this.utilsSvc.dismissModal({ success: true });
 
         this.utilsSvc.presentToast({
-          message: 'Curso creado éxitosamente',
+          message: 'Curso creado exitosamente',
           duration: 1500,
           color: 'success',
           position: 'middle',
@@ -115,7 +115,7 @@ export class SetCursosComponent implements OnInit {
         this.utilsSvc.dismissModal({ success: true });
 
         this.utilsSvc.presentToast({
-          message: 'Curso actualizado éxitosamente',
+          message: 'Curso actualizado exitosamente',
           duration: 1500,
           color: 'success',
           position: 'middle',

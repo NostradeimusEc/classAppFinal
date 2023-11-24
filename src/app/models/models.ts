@@ -11,6 +11,7 @@ export interface User{
     email: string,
     password: string,
     name: string,
+    image: string,
     profile: 'alumno' | 'profesor' | 'admin'
 }
 

@@ -15,6 +15,7 @@ export class HomePage implements OnInit {
   utilsSvc = inject(UtilsService);
 
   cursos: Curso[] = [];
+  loading: boolean = false;
 
   ngOnInit() {
   }
@@ -30,11 +31,16 @@ export class HomePage implements OnInit {
   // ========= Obtener Cursos ==========
   getCursos(){
     let path = `users/${this.user().uid}/cursos`;
+
+    this.loading = true;
     
     let sub = this.firebaseauthSvc.getCollectionData(path).subscribe({
       next: (res: any) => {
         console.log(res);
         this.cursos = res;
+
+        this.loading = false;
+
         sub.unsubscribe();
       }
     })
@@ -51,4 +57,65 @@ export class HomePage implements OnInit {
 
     if(success) this.getCursos(); 
   }
+
+//===== Confirmar eliminacion del curso =====
+async confirmDeleteCurso(curso: Curso) {
+  this.utilsSvc.presentAlert({
+    header: 'Eliminar Curso',
+    message: '¿Quieres eliminar este curso?',
+    mode: 'ios',
+    buttons: [
+      {
+        text: 'Cancelar'
+      }, {
+        text: 'Sí, eliminar',
+        handler: () => {
+          this.deleteCurso(curso);
+        }
+      }
+    ]
+  });
 }
+
+
+
+  // ======== Eliminar Curso =========
+  async deleteCurso(curso: Curso) {
+
+    let path = `users/${this.user().uid}/cursos/${curso.id}` 
+
+    const loading = await this.utilsSvc.loading();
+    await loading.present();
+
+    let imagePath = await this.firebaseauthSvc.getFilePath(curso.image);
+    await this.firebaseauthSvc.deleteFile(imagePath);
+
+    this.firebaseauthSvc.deleteDocument(path).then(async res => {
+        
+      this.cursos = this.cursos.filter(c => c.id !== curso.id);
+
+      this.utilsSvc.presentToast({
+        message: 'Curso eliminado exitosamente',
+        duration: 1500,
+        color: 'success',
+        position: 'middle',
+        icon: 'checkmark-circle-outline'
+    })
+
+    }).catch(error => {
+      console.log(error);
+
+      this.utilsSvc.presentToast({
+          message: error.message,
+          duration: 2500,
+          color: 'primary',
+          position: 'middle',
+          icon: 'alert-circle-outline'
+      })
+
+    }).finally(() => {
+      loading.dismiss();
+    })
+  }
+}
+

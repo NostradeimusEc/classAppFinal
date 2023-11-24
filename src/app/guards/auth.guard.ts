@@ -26,7 +26,7 @@ export class AuthGuard implements CanActivate {
            if(user) resolve(true);
           }
           else{
-            this.utilsSvc.routerlink('/auth');
+            this.firebaseauthSvc.signOut();
             resolve(false);
           }
         })

@@ -2,7 +2,9 @@
 
 <ion-content>
 
-  <ion-list>
+
+  <!-- ========= Cursos ========= -->
+  <ion-list *ngIf="!loading">
     <ion-item-sliding class="curso-item" *ngFor="let c of cursos">
       <ion-item>
         <ion-avatar slot="start">
@@ -27,7 +29,7 @@
         </ion-item-option>
 
       <!-- ========= Eliminar ======== -->  
-        <ion-item-option color="danger">
+        <ion-item-option (click)="confirmDeleteCurso(c)" color="danger">
           <ion-icon class="option-btn" name="trash-outline"></ion-icon>
         </ion-item-option>
       
@@ -36,6 +38,19 @@
   
      
     </ion-item-sliding>
+  </ion-list>
+
+<!-- ========== Loading ========= -->
+  <ion-list *ngIf="loading">
+      <ion-item class="curso-item" *ngFor="let c of [1,1,1,1,1,1,1]">
+        <ion-avatar slot="start">
+          <ion-skeleton-text animated style="width: 100%; height: 100%; "></ion-skeleton-text>
+        </ion-avatar>
+        <ion-label>
+          <div> <ion-skeleton-text animated style="width: 50%"></ion-skeleton-text> </div>
+          <div> <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text> </div>
+        </ion-label>
+      </ion-item>
   </ion-list>
 
 
