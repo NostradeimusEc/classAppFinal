@@ -15,9 +15,21 @@ export class HomePage implements OnInit {
   utilsSvc = inject(UtilsService);
 
   cursos: Curso[] = [];
+  rol: 'alumno' | 'profesor' | 'admin';
   loading: boolean = false;
 
   ngOnInit() {
+  }
+
+  // ======= Datos del Usuario/Rol ============
+  getUserInf(uid: string) {
+      let path = `users/${uid}`;
+      this.firebaseauthSvc.getDocument(path).then((user: User) => {
+        console.log('datos ->', user);
+        if (user){
+          this.rol = user.profile
+        }     
+      })
   }
 
   user(): User{
@@ -76,8 +88,6 @@ async confirmDeleteCurso(curso: Curso) {
     ]
   });
 }
-
-
 
   // ======== Eliminar Curso =========
   async deleteCurso(curso: Curso) {

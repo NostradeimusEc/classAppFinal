@@ -23,6 +23,10 @@ export class FirebaseauthService {
     return getAuth();
   }
 
+  stateUser(){
+    return this.auth.authState
+  }
+
   //======= Acceder ==========
   signIn(user: User) {
     return signInWithEmailAndPassword(getAuth(), user.email, user.password);

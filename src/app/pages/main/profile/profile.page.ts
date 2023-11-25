@@ -1,6 +1,5 @@
 import { Component, Input, OnInit, inject } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Curso, User } from 'src/app/models/models';
+import { User } from 'src/app/models/models';
 import { FirebaseauthService } from 'src/app/services/firebaseauth.service';
 import { UtilsService } from 'src/app/services/utils.service';
 @Component({
@@ -16,24 +15,23 @@ export class ProfilePage implements OnInit {
   ngOnInit() {
   }
 
-
-
   user(): User{
     return this.utilsSvc.getFromlocalStorage('user');
   }
+
 
   //====== Tomar/Seleccionar Imagen =====
   async takeImage(){
 
     let user = this.user();
-    let path = `users/${user.uid}}` 
+    let path = `users/${user.uid}` 
 
     const dataUrl = (await this.utilsSvc.takePicture('Imagen de Perfil')).dataUrl;
     
     const loading = await this.utilsSvc.loading();
     await loading.present();
     
-    let imagePath = `${user.uid}/profile}`;
+    let imagePath = `${user.uid}/profile`;
     user.image = await this.firebaseauthSvc.uploadImage(imagePath, dataUrl);
 
     this.firebaseauthSvc.updateDocument(path, {image: user.image}).then(async res => {

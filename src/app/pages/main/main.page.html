@@ -12,6 +12,10 @@
         <ion-icon slot="start" [name]="p.icon"></ion-icon>
         <ion-label>{{p.title}}</ion-label>
       </ion-item>
+      <ion-item *ngIf="rol === 'admin'" button="true" detail="true" [routerLink]="[ '/set-cursos' ]" detail>
+        <ion-label>Registro de Cursos</ion-label>
+        <ion-icon slot="start" name="desktop-outline"></ion-icon>
+      </ion-item>
     </ion-menu-toggle>
 
 

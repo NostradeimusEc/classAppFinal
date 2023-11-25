@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-
 import { MainPage } from './main.page';
+import { SetCursosComponent } from 'src/app/backend/set-cursos/set-cursos.component';
 
 const routes: Routes = [
   {
@@ -16,9 +16,9 @@ const routes: Routes = [
         path: 'profile',
         loadChildren: () => import('./profile/profile.module').then(m => m.ProfilePageModule)
       }
-
     ]
   },
+  { path: 'set-cursos', component: SetCursosComponent }
 
 ];
 

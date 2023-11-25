@@ -2,7 +2,6 @@
 
 <ion-content>
 
-
   <!-- ========= Cursos ========= -->
   <ion-list *ngIf="!loading">
     <ion-item-sliding class="curso-item" *ngFor="let c of cursos">
@@ -22,7 +21,7 @@
       </ion-item>
 
       <!-- =============== Opciones de ADMIN ============== -->
-      <ion-item-options>
+      <ion-item-options *ngIf="rol === 'admin'">
       <!-- ========= Editar ======== -->
         <ion-item-option (click)=" addUpdateCurso(c)">
           <ion-icon class="option-btn" name="create-outline"></ion-icon>
@@ -34,11 +33,15 @@
         </ion-item-option>
       
       </ion-item-options>
-      
-  
-     
     </ion-item-sliding>
   </ion-list>
+
+<!-- =============== Opciones de ADMIN/Registrar Usuario ============== -->
+  <ion-button *ngIf="rol === 'admin' " class="ion-margin-top" routerLink="sign-up" expand="block" mode="ios" fill="outline">
+    Registrar Usuario
+    <ion-icon slot="end" name="person-add-outline"></ion-icon>
+</ion-button>
+
 
 <!-- ========== Loading ========= -->
   <ion-list *ngIf="loading">

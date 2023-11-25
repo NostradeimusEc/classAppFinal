@@ -16,11 +16,13 @@ export class MainPage implements OnInit {
     { title: 'Perfil', url: '/main/profile', icon: 'person-outline'},
   ]
 
+
   router = inject(Router);
   firebaseauthSvc = inject(FirebaseauthService);
   utilsSvc = inject(UtilsService);
 
   currentPath: string = '';
+  rol: 'alumno' | 'profesor' | 'admin';
 
   ngOnInit() {
     this.router.events.subscribe((event: any) => {
@@ -31,6 +33,17 @@ export class MainPage implements OnInit {
   user(): User{
     return this.utilsSvc.getFromlocalStorage('user');
   }
+
+  // ======= Datos del Usuario/Rol ============
+  getUserInf(uid: string) {
+    let path = `users/${uid}`;
+    this.firebaseauthSvc.getDocument(path).then((user: User) => {
+      console.log('datos ->', user);
+      if (user){
+        this.rol = user.profile
+      }     
+    })
+}
 
   //====== Cerrar Sesión =====
   signOut(){
