@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { User } from 'src/app/models/models';
 import { FirebaseauthService } from 'src/app/services/firebaseauth.service';
 import { UtilsService } from 'src/app/services/utils.service';

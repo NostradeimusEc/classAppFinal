@@ -1,4 +1,4 @@
-<app-header title="Inicio"></app-header>
+<app-header [showMenu]="true" title="Inicio"></app-header>
 
 <ion-content>
 
@@ -21,7 +21,7 @@
       </ion-item>
 
       <!-- =============== Opciones de ADMIN ============== -->
-      <ion-item-options *ngIf="rol === 'admin'">
+      <ion-item-options>
       <!-- ========= Editar ======== -->
         <ion-item-option (click)=" addUpdateCurso(c)">
           <ion-icon class="option-btn" name="create-outline"></ion-icon>
@@ -36,12 +36,16 @@
     </ion-item-sliding>
   </ion-list>
 
-<!-- =============== Opciones de ADMIN/Registrar Usuario ============== -->
-  <ion-button *ngIf="rol === 'admin' " class="ion-margin-top" routerLink="sign-up" expand="block" mode="ios" fill="outline">
+<!-- =============== Opciones de ADMIN/Registrar Curso ============== -->
+<ion-item>
+  <ion-label (click)="addUpdateCurso()">Registrar Cursos</ion-label>
+  <ion-icon slot="start" name="desktop-outline"></ion-icon>
+</ion-item>  
+<!-- =============== /Registrar Usuario ============== -->
+<ion-button class="ion-margin-top" routerLink="sign-up" expand="block" mode="ios" fill="outline">
     Registrar Usuario
     <ion-icon slot="end" name="person-add-outline"></ion-icon>
 </ion-button>
-
 
 <!-- ========== Loading ========= -->
   <ion-list *ngIf="loading">
@@ -57,11 +61,7 @@
   </ion-list>
 
 
-
-  <ion-item>
-    <ion-label (click)="addUpdateCurso()" class="normal">Registro de Cursos</ion-label>
-    <ion-icon slot="start" name="desktop-outline"></ion-icon>
-  </ion-item>
+  
 
 
 </ion-content>
