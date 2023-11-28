@@ -18,10 +18,13 @@
             <strong>Sala:</strong>{{c.sala}}
           </div>
         </ion-label>
+        <ion-button class="ion-margin-top" size="small" mode="ios" fill="outline">
+          Ver Detalle
+        </ion-button>
       </ion-item>
 
       <!-- =============== Opciones de ADMIN ============== -->
-      <ion-item-options>
+      <ion-item-options *ngIf="rol === 'admin'" detail="true">
       <!-- ========= Editar ======== -->
         <ion-item-option (click)=" addUpdateCurso(c)">
           <ion-icon class="option-btn" name="create-outline"></ion-icon>
@@ -37,15 +40,10 @@
   </ion-list>
 
 <!-- =============== Opciones de ADMIN/Registrar Curso ============== -->
-<ion-item>
-  <ion-label (click)="addUpdateCurso()">Registrar Cursos</ion-label>
+<ion-button  class="ion-margin-top" (click)="addUpdateCurso()" expand="block" mode="ios" fill="outline">
+  Registrar Cursos
   <ion-icon slot="start" name="desktop-outline"></ion-icon>
-</ion-item>  
-<!-- =============== /Registrar Usuario ============== -->
-<ion-button class="ion-margin-top" routerLink="sign-up" expand="block" mode="ios" fill="outline">
-    Registrar Usuario
-    <ion-icon slot="end" name="person-add-outline"></ion-icon>
-</ion-button>
+</ion-button>  
 
 <!-- ========== Loading ========= -->
   <ion-list *ngIf="loading">

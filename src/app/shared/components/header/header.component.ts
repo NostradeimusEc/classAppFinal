@@ -1,5 +1,4 @@
 import { Component, Input, OnInit, inject } from '@angular/core';
-import { MenuController } from '@ionic/angular';
 import { UtilsService } from 'src/app/services/utils.service';
 
 @Component({
@@ -14,8 +13,7 @@ export class HeaderComponent  implements OnInit {
   @Input() isModal!: boolean;
   @Input() showMenu!: boolean;
 
-  utilsSvc = inject(UtilsService);
-  menucontroler = inject(MenuController); 
+  utilsSvc = inject(UtilsService); 
 
   ngOnInit() {}
 
@@ -23,9 +21,5 @@ export class HeaderComponent  implements OnInit {
     this.utilsSvc.dismissModal();
   }
 
-  openMenu() {
-    console.log('open menu');
-    this.menucontroler.toggle('principal');
-  }
 
 }
