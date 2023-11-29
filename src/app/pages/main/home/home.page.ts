@@ -20,14 +20,26 @@ export class HomePage implements OnInit {
   rol: 'alumno' | 'profesor' | 'admin' = null;
   loading: boolean = false;
 
+
+  user(): User {
+    return this.utilsSvc.getFromlocalStorage('user');
+  }
+  ionViewDidEnter() {
+    this.getCursos();
+  }
+
   ngOnInit() {
     this.firebaseauthSvc.stateUser().subscribe(res => {
       if (res) {
         this.getUserInf(res.uid);
+        this.getCursos();
       } else {
+        this.cursos = [];
       }
-    })
+    });
   }
+
+ 
 
   // ======= Datos del Usuario/Rol ============
   getUserInf(uid: string) {
@@ -40,30 +52,37 @@ export class HomePage implements OnInit {
     })
   }
 
-  user(): User {
-    return this.utilsSvc.getFromlocalStorage('user');
-  }
-  ionViewWillEnter() {
-    this.getCursos();
-  }
+// ========= Obtener Cursos ==========
+getCursos() {
+  let path = `cursos`;
 
-  // ========= Obtener Cursos ==========
-  getCursos() {
-    let path = `cursos`;
+  this.loading = true;
 
-    this.loading = true;
-
-    let sub = this.firebaseauthSvc.getCollectionData(path).subscribe({
-      next: (res: any) => {
-        console.log(res);
-        this.cursos = res;
-
+  this.firebaseauthSvc.stateUser().subscribe(user => {
+    if (user) {
+      // Obtener todos los cursos
+      this.firebaseauthSvc.getCollectionData(path).subscribe((cursos: Curso[]) => {
+        this.cursos = cursos.filter(curso => {
+          // Si el usuario es un profesor, mostrar solo el curso que tiene asignado
+          if (curso.profesor.uid == user.uid) {
+            return true;
+          }
+          // Si el usuario es un alumno, mostrar solo los cursos a los que está asignado
+          if (curso.alumnos.some(alumno => alumno.uid == user.uid)) {
+            return true;
+          }
+          // Si el usuario es un admin, mostrar todos los cursos
+          if (this.rol == 'admin') {
+            return true;
+          }
+          return false;
+        });
         this.loading = false;
+      });
+    }
+  });
+}
 
-        sub.unsubscribe();
-      }
-    })
-  }
 
   // ===== Agregar o actualizar un curso
   async addUpdateCurso(curso?: Curso) {

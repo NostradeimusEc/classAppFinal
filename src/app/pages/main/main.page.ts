@@ -34,9 +34,23 @@ export class MainPage implements OnInit {
   }
 
   //====== Cerrar Sesión =====
-  signOut(){
-    this.firebaseauthSvc.signOut();
+async signOut(){
+  try {
+    await this.firebaseauthSvc.signOut();
+    // Muestra un toast de éxito
+    this.utilsSvc.presentToast({
+      message: 'Sesión finalizada con éxito',
+      duration: 3000,
+      color: 'success',
+      position: 'middle'
+    });
+    // Recarga la página
+    window.location.reload();
+  } catch (error) {
+    // Maneja cualquier error que pueda ocurrir
+    console.error('Error al cerrar la sesión', error);
   }
+}
 
 
 }
