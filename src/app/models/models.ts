@@ -16,3 +16,8 @@ export interface User{
     profile: 'alumno' | 'profesor' | 'admin'
 }
 
+export interface CursoPerfil {
+    cursoId: string;
+    perfil: 'alumno' | 'profesor' | 'admin';
+}
+

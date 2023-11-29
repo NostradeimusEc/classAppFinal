@@ -25,12 +25,12 @@
 
       <!-- =============== Opciones de ADMIN ============== -->
       <ion-item-options *ngIf="rol === 'admin'" detail="true">
-      <!-- ========= Editar ======== -->
+        <!-- ========= Editar ======== -->
         <ion-item-option (click)=" addUpdateCurso(c)">
           <ion-icon class="option-btn" name="create-outline"></ion-icon>
         </ion-item-option>
 
-      <!-- ========= Eliminar ======== -->  
+        <!-- ========= Eliminar ======== -->
         <ion-item-option (click)="confirmDeleteCurso(c)" color="danger">
           <ion-icon class="option-btn" name="trash-outline"></ion-icon>
         </ion-item-option>
@@ -39,18 +39,20 @@
     </ion-item-sliding>
   </ion-list>
 
-<!-- =============== Opciones de ADMIN/Registrar Curso ============== -->
-<ion-button *ngIf="rol === 'admin'" class="ion-margin-top" (click)="addUpdateCurso()" expand="block" mode="ios" fill="outline">
-  Registrar Cursos
-  <ion-icon slot="start" name="desktop-outline"></ion-icon>
-</ion-button>  
+  <!-- =============== Opciones de ADMIN/Registrar Curso ============== -->
+  <ion-button *ngIf="rol === 'admin'" class="ion-margin-top" (click)="addUpdateCurso()" expand="block" mode="ios"
+    fill="outline">
+    Registrar Cursos
+    <ion-icon slot="start" name="desktop-outline"></ion-icon>
+  </ion-button>
 
- <!-- =============== /Registrar Usuario ============== -->
- <ion-button *ngIf="rol === 'admin'" class="ion-margin-top" [routerLink]="['/sign-up']"  expand="block" mode="ios" fill="outline">
-  Registrar Usuario
-  <ion-icon slot="end" name="person-add-outline"></ion-icon>
-</ion-button>
-  
+  <!-- =============== /Registrar Usuario ============== -->
+  <ion-button *ngIf="rol === 'admin'" class="ion-margin-top" [routerLink]="['/sign-up']" expand="block" mode="ios"
+    fill="outline">
+    Registrar Usuario
+    <ion-icon slot="end" name="person-add-outline"></ion-icon>
+  </ion-button>
+
 
 
 </ion-content>

@@ -4,6 +4,7 @@ import { Curso, User } from 'src/app/models/models';
 import { FirebaseauthService } from 'src/app/services/firebaseauth.service';
 import { UtilsService } from 'src/app/services/utils.service';
 
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.page.html',
@@ -20,25 +21,25 @@ export class HomePage implements OnInit {
 
   ngOnInit() {
     this.firebaseauthSvc.stateUser().subscribe(res => {
-          if(res) {
-              this.getUserInf(res.uid);
-          }else {
-          }
+      if (res) {
+        this.getUserInf(res.uid);
+      } else {
+      }
     })
   }
 
   // ======= Datos del Usuario/Rol ============
   getUserInf(uid: string) {
-      let path = `users/${uid}`;
-      this.firebaseauthSvc.getDocument(path).then((user: User) => {
-        console.log('datos ->', user);
-        if (user){
-          this.rol = user.profile
-        }     
-      })
+    let path = `users/${uid}`;
+    this.firebaseauthSvc.getDocument(path).then((user: User) => {
+      console.log('datos ->', user);
+      if (user) {
+        this.rol = user.profile
+      }
+    })
   }
 
-  user(): User{
+  user(): User {
     return this.utilsSvc.getFromlocalStorage('user');
   }
   ionViewWillEnter() {
@@ -46,11 +47,11 @@ export class HomePage implements OnInit {
   }
 
   // ========= Obtener Cursos ==========
-  getCursos(){
+  getCursos() {
     let path = `cursos`;
 
     this.loading = true;
-    
+
     let sub = this.firebaseauthSvc.getCollectionData(path).subscribe({
       next: (res: any) => {
         console.log(res);
@@ -64,40 +65,40 @@ export class HomePage implements OnInit {
   }
 
   // ===== Agregar o actualizar un curso
- async addUpdateCurso(curso?: Curso) {
+  async addUpdateCurso(curso?: Curso) {
 
-  let success = await  this.utilsSvc.presentModal({
+    let success = await this.utilsSvc.presentModal({
       component: SetCursosComponent,
       cssClass: 'add-update-modal',
       componentProps: { curso }
     })
 
-    if(success) this.getCursos(); 
+    if (success) this.getCursos();
   }
 
-//===== Confirmar eliminacion del curso =====
-async confirmDeleteCurso(curso: Curso) {
-  this.utilsSvc.presentAlert({
-    header: 'Eliminar Curso',
-    message: '¿Quieres eliminar este curso?',
-    mode: 'ios',
-    buttons: [
-      {
-        text: 'Cancelar'
-      }, {
-        text: 'Sí, eliminar',
-        handler: () => {
-          this.deleteCurso(curso);
+  //===== Confirmar eliminacion del curso =====
+  async confirmDeleteCurso(curso: Curso) {
+    this.utilsSvc.presentAlert({
+      header: 'Eliminar Curso',
+      message: '¿Quieres eliminar este curso?',
+      mode: 'ios',
+      buttons: [
+        {
+          text: 'Cancelar'
+        }, {
+          text: 'Sí, eliminar',
+          handler: () => {
+            this.deleteCurso(curso);
+          }
         }
-      }
-    ]
-  });
-}
+      ]
+    });
+  }
 
   // ======== Eliminar Curso =========
   async deleteCurso(curso: Curso) {
 
-    let path = `cursos/${curso.id}` 
+    let path = `cursos/${curso.id}`
 
     const loading = await this.utilsSvc.loading();
     await loading.present();
@@ -106,7 +107,7 @@ async confirmDeleteCurso(curso: Curso) {
     await this.firebaseauthSvc.deleteFile(imagePath);
 
     this.firebaseauthSvc.deleteDocument(path).then(async res => {
-        
+
       this.cursos = this.cursos.filter(c => c.id !== curso.id);
 
       this.utilsSvc.presentToast({
@@ -115,27 +116,23 @@ async confirmDeleteCurso(curso: Curso) {
         color: 'success',
         position: 'middle',
         icon: 'checkmark-circle-outline'
-    })
+      })
 
     }).catch(error => {
       console.log(error);
 
       this.utilsSvc.presentToast({
-          message: error.message,
-          duration: 2500,
-          color: 'primary',
-          position: 'middle',
-          icon: 'alert-circle-outline'
+        message: error.message,
+        duration: 2500,
+        color: 'primary',
+        position: 'middle',
+        icon: 'alert-circle-outline'
       })
 
     }).finally(() => {
       loading.dismiss();
     })
   }
-
-
-
-
 
 }
 
