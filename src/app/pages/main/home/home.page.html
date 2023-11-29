@@ -4,6 +4,9 @@
 
   <!-- ========= Cursos ========= -->
   <ion-list *ngIf="!loading">
+    <ion-list-header>
+      <ion-label>Lista de Cursos</ion-label>
+    </ion-list-header>
     <ion-item-sliding class="curso-item" *ngFor="let c of cursos">
       <ion-item>
         <ion-avatar slot="start">
@@ -18,7 +21,7 @@
             <strong>Sala:</strong>{{c.sala}}
           </div>
         </ion-label>
-        <ion-button class="ion-margin-top" size="small" mode="ios" fill="outline">
+        <ion-button size="small" mode="ios" fill="outline">
           Ver Detalle
         </ion-button>
       </ion-item>

@@ -2,9 +2,9 @@
     --padding-top: 20px;
 
     ion-avatar {
-        width: 70px;
+        width: 75px;
         height: 80px;
-        --border-radius: 15px;
+        --border-radius: 10px;
     }
 
     .name {
@@ -16,7 +16,7 @@
         font-size: 13px;
 
         strong {
-            font-weight: 500;
+            font-weight: bold;
         }
     }
 
@@ -29,4 +29,10 @@
         border-radius: 10px;
         margin-left: 0;
     }
+}
+
+ion-list-header{
+    font-size: 25px;
+    margin-top: 5px;
+    font-weight: bold;
 }

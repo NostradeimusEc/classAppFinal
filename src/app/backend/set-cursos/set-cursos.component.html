@@ -58,6 +58,22 @@
           <div *ngIf="form.controls.sala.errors?.['required']">Este campo es requerido</div>
       </div>
 
+       <!--========= Alumnos ==========-->
+       <ion-item>
+        <ion-label>Alumnos</ion-label>
+        <ion-select multiple="true" formControlName="alumnos" label="Alumnos" mode="ios">
+          <ion-select-option *ngFor="let alumno of alumnos" [value]="alumno.uid" >{{alumno.name}}</ion-select-option>
+        </ion-select>
+      </ion-item>
+
+       <!--========= Profesor ==========-->
+       <ion-item>
+        <ion-label>Profesor</ion-label>
+        <ion-select formControlName="profesor" mode="ios">
+          <ion-select-option *ngFor="let profesor of profesores" [value]="profesor.uid">{{profesor.name}}</ion-select-option>
+        </ion-select>
+      </ion-item>
+
       <ion-button mode="ios" class="ion-margin" type="submit" [disabled]="form.invalid">
         {{curso ? 'Actualizar Curso' : 'Agregar Curso'}}
         <ion-icon slot="end" name="checkmark-circle-outline"></ion-icon>

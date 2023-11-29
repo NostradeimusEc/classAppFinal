@@ -16,6 +16,7 @@ export class HomePage implements OnInit {
   utilsSvc = inject(UtilsService);
 
   cursos: Curso[] = [];
+  users: User[] = [];
   rol: 'alumno' | 'profesor' | 'admin' = null;
   loading: boolean = false;
 

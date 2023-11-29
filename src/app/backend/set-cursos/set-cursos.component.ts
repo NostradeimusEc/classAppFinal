@@ -1,9 +1,9 @@
 import { Component, Input, OnInit, inject } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Curso, CursoPerfil, User } from 'src/app/models/models';
+import { Curso, User } from 'src/app/models/models';
 import { FirebaseauthService } from 'src/app/services/firebaseauth.service';
 import { UtilsService } from 'src/app/services/utils.service';
-import { arrayUnion } from '@firebase/firestore';
+
 
 @Component({
   selector: 'app-set-cursos',
@@ -20,7 +20,9 @@ export class SetCursosComponent implements OnInit {
     seccion: new FormControl('', [Validators.required]),
     sala: new FormControl('', [Validators.required]),
     image: new FormControl('', [Validators.required]),
-    userId: new FormControl(['']),
+    userId: new FormControl([]),
+    alumnos: new FormControl([]),
+    profesor: new FormControl({}),
   })
 
   firebaseauthSvc = inject(FirebaseauthService);
@@ -28,10 +30,18 @@ export class SetCursosComponent implements OnInit {
 
   user = {} as User;
 
-  ngOnInit() {
+  alumnos: User[] = [];
+  profesores: User[] = [];
 
+  async ngOnInit() {
     this.user = this.utilsSvc.getFromlocalStorage('user');
     if (this.curso) this.form.setValue(this.curso);
+    // Obtener los usuarios que son alumnos
+    const snapshotAlumnos = await this.firebaseauthSvc.firestore.collection('users', ref => ref.where('profile', '==', 'alumno')).get().toPromise();
+    this.alumnos = snapshotAlumnos.docs.map(doc => doc.data() as User);
+    // Obtener los usuarios que son profesores
+    const snapshotProfesores = await this.firebaseauthSvc.firestore.collection('users', ref => ref.where('profile', '==', 'profesor')).get().toPromise();
+    this.profesores = snapshotProfesores.docs.map(doc => doc.data() as User);
   }
 
   //====== Tomar/Seleccionar Imagen =====
@@ -62,10 +72,13 @@ export class SetCursosComponent implements OnInit {
     let imageUrl = await this.firebaseauthSvc.uploadImage(imagePath, dataUrl);
     this.form.controls.image.setValue(imageUrl);
 
-
+    
     if (this.user && this.user.uid) {
       this.form.value.userId = [this.user.uid];
     }
+    // Aquí se agregan los campos 'alumnos' y 'profesor'
+    this.form.value.alumnos = this.alumnos.filter(alumno => this.form.value.alumnos.includes(alumno.uid));
+    this.form.value.profesor = this.profesores.find(profesor => profesor.uid === this.form.value.profesor);
     delete this.form.value.id
 
     this.firebaseauthSvc.addDocument(path, this.form.value).then(async res => {
@@ -111,7 +124,9 @@ export class SetCursosComponent implements OnInit {
       let imageUrl = await this.firebaseauthSvc.uploadImage(imagePath, dataUrl);
       this.form.controls.image.setValue(imageUrl);
     }
-
+    // Aquí se actualizan los campos 'alumnos' y 'profesor'
+    this.form.value.alumnos = this.alumnos.filter(alumno => this.form.value.alumnos.includes(alumno.uid));
+    this.form.value.profesor = this.profesores.find(profesor => profesor.uid === this.form.value.profesor);
     delete this.form.value.id
 
     this.firebaseauthSvc.updateDocument(path, this.form.value).then(async res => {
@@ -125,10 +140,8 @@ export class SetCursosComponent implements OnInit {
         position: 'middle',
         icon: 'checkmark-circle-outline'
       })
-
     }).catch(error => {
       console.log(error);
-
       this.utilsSvc.presentToast({
         message: error.message,
         duration: 2500,
@@ -136,25 +149,8 @@ export class SetCursosComponent implements OnInit {
         position: 'middle',
         icon: 'alert-circle-outline'
       })
-
     }).finally(() => {
       loading.dismiss();
     })
   }
-
-
-   //=============== Agregar Curso por Perfil ==============
-   async agregarUsuariosPorPerfilACurso(cursoPerfil: CursoPerfil) {
-    // Obtener los usuarios que coincidan con el perfil
-    const snapshot = await this.firebaseauthSvc.firestore.collection('users', ref => ref.where('profile', '==', cursoPerfil.perfil)).get().toPromise();
-
-    // Crear un array con los IDs de los usuarios
-    const userIds = snapshot.docs.map(doc => doc.id);
-
-    // Agregar los IDs de los usuarios al curso
-    await this.firebaseauthSvc.firestore.collection('cursos').doc(cursoPerfil.cursoId).update({
-      userId: arrayUnion(...userIds)
-    });
-  }
- 
 }

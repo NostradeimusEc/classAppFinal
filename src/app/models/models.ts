@@ -4,7 +4,9 @@ export interface Curso {
     image: string;
     sala: string;
     id: string;
-    userId: string[];
+    userId: User[];
+    alumnos: User[]; 
+    profesor: User;
 }
 
 export interface User{
@@ -14,10 +16,5 @@ export interface User{
     name: string,
     image: string,
     profile: 'alumno' | 'profesor' | 'admin'
-}
-
-export interface CursoPerfil {
-    cursoId: string;
-    perfil: 'alumno' | 'profesor' | 'admin';
 }
 
