@@ -27,8 +27,6 @@ export class HomePage implements OnInit {
     })
   }
 
-
-
   // ======= Datos del Usuario/Rol ============
   getUserInf(uid: string) {
       let path = `users/${uid}`;
@@ -47,10 +45,9 @@ export class HomePage implements OnInit {
     this.getCursos();
   }
 
-
   // ========= Obtener Cursos ==========
   getCursos(){
-    let path = `users/${this.user().uid}/cursos`;
+    let path = `cursos`;
 
     this.loading = true;
     
@@ -100,7 +97,7 @@ async confirmDeleteCurso(curso: Curso) {
   // ======== Eliminar Curso =========
   async deleteCurso(curso: Curso) {
 
-    let path = `users/${this.user().uid}/cursos/${curso.id}` 
+    let path = `cursos/${curso.id}` 
 
     const loading = await this.utilsSvc.loading();
     await loading.present();

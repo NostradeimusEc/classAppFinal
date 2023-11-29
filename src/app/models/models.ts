@@ -4,6 +4,7 @@ export interface Curso {
     image: string;
     sala: string;
     id: string;
+    userId: string[];
 }
 
 export interface User{

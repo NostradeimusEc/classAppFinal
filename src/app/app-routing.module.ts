@@ -11,11 +11,15 @@ const onlyAdmin = () => map( (user: any) => !!user && user.uid === uidAdmin);
 
 
 const routes: Routes = [
-  { path: 'set-cursos', component: SetCursosComponent, ...canActivate(onlyAdmin) },
+  { path: 'set-cursos', component: SetCursosComponent},
   { path: '', redirectTo: 'auth', pathMatch:'full' },
   {
     path: 'auth',
     loadChildren: () => import('./pages/auth/auth.module').then( m => m.AuthPageModule), canActivate: [NoAuthGuard]
+  },
+  {
+    path: 'sign-up',
+    loadChildren: () => import('./pages/auth/sign-up/sign-up.module').then(m => m.SignUpPageModule)
   },
   {
     path: 'main',

@@ -19,6 +19,7 @@ export class SetCursosComponent implements OnInit {
     seccion: new FormControl('', [Validators.required]),
     sala: new FormControl('', [Validators.required]),
     image: new FormControl('', [Validators.required]),
+    userId: new FormControl(['']),
   })
 
   firebaseauthSvc = inject(FirebaseauthService);
@@ -49,23 +50,26 @@ export class SetCursosComponent implements OnInit {
   // ======== Crear Curso =========
   async createCurso() {
     
-
-      let path = `users/${this.user.uid}/cursos` 
+      let path = `cursos`; 
 
       const loading = await this.utilsSvc.loading();
       await loading.present();
 
       // ======= subir la imagen y obtener la url ===========
       let dataUrl = this.form.value.image
-      let imagePath = `${this.user.uid}/${Date.now()}`;
+      let imagePath = `${Date.now()}`;
       let imageUrl = await this.firebaseauthSvc.uploadImage(imagePath, dataUrl);
       this.form.controls.image.setValue(imageUrl);
 
+
+      if (this.user && this.user.uid) {
+        this.form.value.userId =  [this.user.uid]; 
+      }
       delete this.form.value.id
 
       this.firebaseauthSvc.addDocument(path, this.form.value).then(async res => {
           
-        this.utilsSvc.dismissModal({ success: true });
+      this.utilsSvc.dismissModal({ success: true });
 
         this.utilsSvc.presentToast({
           message: 'Curso creado exitosamente',
@@ -94,7 +98,7 @@ export class SetCursosComponent implements OnInit {
   // ======== Actualizar Curso =========
   async updateCurso() {
 
-      let path = `users/${this.user.uid}/cursos/${this.curso.id}` 
+      let path = `cursos/${this.curso.id}`; 
 
       const loading = await this.utilsSvc.loading();
       await loading.present();
