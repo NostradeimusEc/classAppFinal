@@ -5,11 +5,6 @@
     <ion-buttons slot="start">
       <ion-back-button *ngIf="backButton" [defaultHref]="backButton"></ion-back-button>
 
-
-      <!--<ion-button (click)="openMenu()">
-      <ion-icon slot="icon-only" name="menu"></ion-icon>
-    </ion-button> -->
-
     <!--============= Dismiss modal ==============-->
       <ion-button (click)="dismissModal()" *ngIf="isModal">
         <ion-icon name="close-circle-outline"></ion-icon>

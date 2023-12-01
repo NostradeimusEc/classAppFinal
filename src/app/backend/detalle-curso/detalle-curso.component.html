@@ -1,2 +1,38 @@
-<app-header title="Detalle Curso"></app-header>
+<app-header backButton="/main/home" title="Detalle Curso"></app-header>
+<ion-content>
+  <ion-list>
+    <ion-item *ngFor="let curso of cursos">
+      <ion-label>
+        <div class="name">{{curso.name}}</div>
+        <div class="data">
+          <strong>Seccion:</strong>{{curso.seccion}} <br>
+        </div>
+        <div class="data">
+          <strong>Sala:</strong>{{curso.sala}}
+        </div>
+      </ion-label>
+      <ion-button *ngIf="rol === 'profesor'" (click)="generarCodigoQR(curso.name, curso.seccion)">Generar código QR</ion-button>
+    </ion-item>
+  </ion-list>
 
+  <ion-card *ngIf="rol === 'profesor'">
+    <ion-card-content>
+      <div class="ion-text-center">
+        <qrcode [qrdata]="codigoQR" *ngIf="codigoQR"></qrcode>
+      </div>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-button *ngIf="rol === 'alumno'" (click)="scanQRCode()">Escanear código QR</ion-button>
+
+  <ion-list  *ngIf="rol === 'profesor'">
+    <ion-list-header>
+      Lista de Alumnos presentes QR
+    </ion-list-header>
+    <ion-item *ngFor="let user of alumnosPresentes">
+      <ion-label>{{ user.name }}</ion-label>
+    </ion-item>
+  </ion-list>
+
+  <ion-loading [isOpen]="loading"></ion-loading>
+</ion-content>

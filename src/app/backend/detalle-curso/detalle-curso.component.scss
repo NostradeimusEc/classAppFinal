@@ -1,0 +1,45 @@
+// Estilos para el encabezado de la lista
+ion-list-header{
+    font-size: 20px;
+    margin-top: 5px;
+    font-weight: bold;
+}
+
+// Estilos para el botón
+ion-button {
+    --background: #3880ff;
+    --color: white;
+}
+
+// Estilos para la tarjeta
+ion-card {
+    border: 1px solid #f0f0f0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+// Estilos para los elementos de la lista al pasar el ratón sobre ellos
+ion-list ion-item:hover {
+  background-color: #f8f8f8;
+}
+
+// Estilos para los nombres de los alumnos
+ion-list ion-item ion-label {
+    color: #333;
+    font-size: 16px;
+}
+
+// Estilos para los elementos de la lista de alumnos
+ion-list ion-item {
+    border-bottom: 1px solid #f0f0f0;
+}
+.name {
+    font-weight: 600;
+    padding-bottom: 5px;
+}
+.data {
+    font-size: 13px;
+
+    strong {
+        font-weight: bold;
+    }
+}

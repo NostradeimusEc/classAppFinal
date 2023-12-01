@@ -15,12 +15,13 @@ import { environment } from 'src/environments/environment';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { AngularFireStorageModule } from '@angular/fire/compat/storage';
 import { AngularFireAuthModule } from '@angular/fire/compat/auth';
+import { QRScanner } from '@ionic-native/qr-scanner/ngx';
 
 @NgModule({
   declarations: [AppComponent],
   imports: [
     BrowserModule, 
-    IonicModule.forRoot({mode: 'md'}), 
+    IonicModule.forRoot({mode: 'md'}),
     BackendModule, 
     AppRoutingModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
@@ -29,7 +30,9 @@ import { AngularFireAuthModule } from '@angular/fire/compat/auth';
     AngularFireAuthModule
   ],
   providers: [
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy,}],
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy,},
+    QRScanner  
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

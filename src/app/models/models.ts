@@ -9,12 +9,17 @@ export interface Curso {
     profesor: User;
 }
 
-export interface User{
-    uid: string,
-    email: string,
-    password: string,
-    name: string,
-    image: string,
-    profile: 'alumno' | 'profesor' | 'admin'
-}
+export interface User {
+    uid: string;
+    email: string;
+    password?: string;
+    name?: string;
+    image?: string;
+    profile?: 'alumno' | 'profesor' | 'admin';
+  }
 
+export interface QRInfo {
+    nombreCurso: string;
+    seccionCurso: string;
+    fecha: string;
+  }

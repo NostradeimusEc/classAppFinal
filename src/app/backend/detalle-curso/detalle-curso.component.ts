@@ -1,9 +1,10 @@
-import { Component, OnInit, inject } from '@angular/core';
-import { Curso, User } from 'src/app/models/models';
+import { Component, OnInit } from '@angular/core';
+import { Curso, QRInfo, User } from 'src/app/models/models';
 import { FirebaseauthService } from 'src/app/services/firebaseauth.service';
 import { UtilsService } from 'src/app/services/utils.service';
-import { ActivatedRoute, Router } from '@angular/router';
-import * as qrcode from 'qrcode-generator';
+import { AlertController } from '@ionic/angular';
+import { Router } from '@angular/router';
+import { QRScanner, QRScannerStatus } from '@ionic-native/qr-scanner/ngx';
 
 @Component({
   selector: 'app-detallecurso',
@@ -12,76 +13,175 @@ import * as qrcode from 'qrcode-generator';
 })
 export class DetalleCursoComponent implements OnInit {
 
-    rol: 'alumno' | 'profesor' | 'admin' = null;
-    loading: boolean = false;
+  cursos: Curso[] = [];
+  codigoQR: string = '';
+  users: User[] = [];
+  rol: 'alumno' | 'profesor' | 'admin' = null;
+  loading: boolean = false;
+  alumnosPresentes: User[] = [];
 
-    cursol: Curso | undefined;
-    alumnosl: User[] | undefined = [];
-    profesorId: string = ''; 
-    cursoId: string = '';
-  
-    qrDataURL: string = ''; 
-  
-    constructor(
-      private firebaseauthSvc: FirebaseauthService,
-      private utilsSvc: UtilsService,
-      private router: Router,
-      private activeroute: ActivatedRoute
-    ) { 
-      this.activeroute.queryParams.subscribe(params => {
-        if (this.router.getCurrentNavigation()?.extras.state) {
-          this.profesorId = this.router.getCurrentNavigation()?.extras.state?.['idProfesor'];
-          this.cursoId = this.router.getCurrentNavigation()?.extras.state?.['idCurso'];
-        }
-      });
+  constructor(
+    private firebaseauthSvc: FirebaseauthService,
+    private utilsSvc: UtilsService,
+    private alertController: AlertController,
+    private router: Router,
+    private qrScanner: QRScanner
+  ) {}
+
+  ngOnInit() {
+    this.firebaseauthSvc.stateUser().subscribe(res => {
+      if (res) {
+        let user = this.convertFirebaseUser(res);
+        this.getUserInf(user.uid);
+        this.getCursos();
+      } else {
+        this.cursos = [];
+      }
+    });
+  }
+
+  async generarCodigoQR(nombreCurso: string, seccionCurso: string) {
+    this.loading = true;
+    if (!nombreCurso || !seccionCurso) {
+      console.error('Los parámetros nombreCurso y seccionCurso no pueden estar vacíos');
+      this.loading = false;
+      return;
     }
-  
-    generateQRCode(curso: Curso) {
-      const fechaActual = new Date().toISOString().split('T')[0];  // Fecha en formato YYYY-MM-DD
-      const data = `${curso.id}-${curso.seccion}-${fechaActual}`;
-  
-      let qr = qrcode(4, 'L');
-      qr.addData(data);
-      qr.make();
-      this.qrDataURL = qr.createDataURL(4);
-    }
-  
-    scanQRCode() {
-      // Aquí debes implementar la lógica para escanear el código QR.
-      // Esto dependerá de la biblioteca o API que estés utilizando para escanear códigos QR.
-    }
-  
-    getCursos() {
-      let path = `cursos`;
-  
-      this.loading = true;
-  
-      this.firebaseauthSvc.stateUser().subscribe(user => {
-        if (user) {
-          // Obtener todos los cursos
-          this.firebaseauthSvc.getCollectionData(path).subscribe((cursos: Curso[]) => {
-            this.cursol = cursos.filter(curso => {
-              // Si el usuario es un profesor, mostrar solo el curso que tiene asignado
-              if (curso.profesor.uid == user.uid && this.rol == 'profesor') {
-                return true;
-              }
-              // Si el usuario es un alumno, mostrar solo los cursos a los que está asignado
-              if (curso.alumnos.some(alumno => alumno.uid == user.uid) && this.rol == 'alumno') {
-                return true;
-              }
-              // Si el usuario es un admin, mostrar todos los cursos
-              if (this.rol == 'admin') {
-                return true;
-              }
-              return false;
-            });
-            this.loading = false;
+    // Simula un retraso en la generación del código QR
+    setTimeout(() => {
+      this.codigoQR = `Curso: ${nombreCurso}, Sección: ${seccionCurso}, Fecha: ${new Date().toLocaleDateString()}`;
+      this.loading = false;
+    }, 1300);  
+  }
+
+  scanQRCode() {
+    this.qrScanner.prepare()
+      .then((status: QRScannerStatus) => {
+        if (status.authorized) {
+          let scanSub = this.qrScanner.scan().subscribe((text: string) => {
+            console.log('Scanned something', text);
+            this.onQRScan(text);
+            scanSub.unsubscribe();
           });
+        } else if (status.denied) {
+          console.log('Camera permission was permanently denied');
+        } else {
+          console.log('Permission denied for this runtime.');
         }
-      });
+      })
+      .catch((e: any) => console.log('Error is', e));
+  }
+
+  async presentAlertConfirm(nombreCurso: string, seccionCurso: string, fecha: string) {
+    const alert = await this.alertController.create({
+      header: 'Confirmar',
+      message: `Curso: ${nombreCurso}, Sección: ${seccionCurso}, Fecha: ${fecha}. ¿Deseas ingresar a la clase?`,
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: (blah) => {
+            console.log('Confirm Cancel: blah');
+          }
+        }, {
+          text: 'Aceptar',
+          handler: () => {
+            this.checkUserInFirebase();
+          }
+        }
+      ]
+    });
+    await alert.present();
+  }
+
+  onQRScan(data: string) {
+    let info = this.decodeQRData(data);
+    this.presentAlertConfirm(info.nombreCurso, info.seccionCurso, info.fecha);
+
+    // Añade el usuario a la lista de alumnos presentes
+    let user = this.user();
+    this.addAlumnoPresente(user);
+  }
+
+  decodeQRData(data: string): QRInfo {
+    let info = data.split(', ').reduce((obj, item) => {
+      let [key, value] = item.split(': ');
+      obj[key] = value;
+      return obj;
+    }, {} as any);
+
+    return info as QRInfo;
+  }
+
+  checkUserInFirebase() {
+    let user = this.user();
+    let path = `users/${user.uid}`;
+    this.firebaseauthSvc.getDocument(path).then((user: User) => {
+      if (user) {
+        this.router.navigate(['/welcome-curso'], { queryParams: { curso: this.codigoQR } });
+      } else {
+        console.error('Primero debes iniciar sesión');
+        this.router.navigate(['/auth']);
+      }
+    });
+  }
+
+  user(): User {
+    return this.utilsSvc.getFromlocalStorage('user');
+  }
+
+  getUserInf(uid: string) {
+    let path = `users/${uid}`;
+    this.firebaseauthSvc.getDocument(path).then((user: User) => {
+      console.log('datos ->', user);
+      if (user) {
+        this.rol = user.profile
+      }
+    })
+  }
+
+  getCursos() {
+    let path = `cursos`;
+    this.loading = true;
+    this.firebaseauthSvc.stateUser().subscribe(user => {
+      if (user) {
+        this.firebaseauthSvc.getCollectionData(path).subscribe((cursos: Curso[]) => {
+          this.cursos = cursos.filter(curso => this.filterCursos(curso, user));
+          this.loading = false;
+        });
+      }
+    });
+  }
+
+  filterCursos(curso: Curso, user: User): boolean {
+    if (curso.profesor.uid == user.uid) {
+      return true;
     }
-  
-    ngOnInit() {
-      this.getCursos();
+    if (curso.alumnos.some(alumno => alumno.uid == user.uid)) {
+      return true;
+    }
+    if (this.rol == 'admin') {
+      return true;
+    }
+    return false;
+  }
+
+  convertFirebaseUser(user: firebase.default.User): User {
+    return {
+      uid: user.uid,
+      email: user.email,
+      password: null,
+      name: user.displayName || null,
+      image: user.photoURL || null,
+      profile: null
+    };
+  }
+
+  addAlumnoPresente(user: User) {
+    // Verifica si el usuario ya está en la lista
+    if (!this.alumnosPresentes.some(alumno => alumno.uid === user.uid)) {
+      this.alumnosPresentes.push(user);
     }
   }
+}
