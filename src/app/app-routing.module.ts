@@ -4,6 +4,7 @@ import { SetCursosComponent } from './backend/set-cursos/set-cursos.component';
 import { NoAuthGuard } from './guards/no-auth.guard';
 import { AuthGuard } from './guards/auth.guard';
 import { map } from 'rxjs/operators';
+import { DetalleCursoComponent } from './backend/detalle-curso/detalle-curso.component';
 
 const uidAdmin = 't2Zf94C5jgWFoWzCvyTuGoLYg9S2';
 const onlyAdmin = () => map( (user: any) => !!user && user.uid === uidAdmin);
@@ -11,6 +12,7 @@ const onlyAdmin = () => map( (user: any) => !!user && user.uid === uidAdmin);
 
 const routes: Routes = [
   { path: 'set-cursos', component: SetCursosComponent},
+  { path: 'detalle-curso', component: DetalleCursoComponent},
   { path: '', redirectTo: 'auth', pathMatch:'full' },
   {
     path: 'auth',

@@ -39,8 +39,6 @@ export class HomePage implements OnInit {
     });
   }
 
- 
-
   // ======= Datos del Usuario/Rol ============
   getUserInf(uid: string) {
     let path = `users/${uid}`;
@@ -152,6 +150,10 @@ getCursos() {
     }).finally(() => {
       loading.dismiss();
     })
+  }
+
+  verDetalle(curso: Curso) {
+    this.utilsSvc.routerlink('/detalle-curso');
   }
 
 }
