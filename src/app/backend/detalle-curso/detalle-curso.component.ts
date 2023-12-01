@@ -59,17 +59,17 @@ export class DetalleCursoComponent implements OnInit {
       .then((status: QRScannerStatus) => {
         if (status.authorized) {
           let scanSub = this.qrScanner.scan().subscribe((text: string) => {
-            console.log('Scanned something', text);
+            console.log('Se escaneó algo', text);
             this.onQRScan(text);
             scanSub.unsubscribe();
           });
         } else if (status.denied) {
-          console.log('Camera permission was permanently denied');
+          console.log('El permiso de la cámara fue denegado permanentemente');
         } else {
-          console.log('Permission denied for this runtime.');
+          console.log('Permiso denegado para esta ejecución');
         }
       })
-      .catch((e: any) => console.log('Error is', e));
+      .catch((e: any) => console.log('El error es', e));
   }
 
   async presentAlertConfirm(nombreCurso: string, seccionCurso: string, fecha: string) {
