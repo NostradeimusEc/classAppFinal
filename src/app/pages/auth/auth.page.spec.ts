@@ -22,81 +22,79 @@ anterior, se establecen valores válidos para el formulario. Luego, se llama al 
 y se verifica que los métodos getDocument, saveInlocalStorage y routerlink se hayan llamado.
 */
 
-
 class MockFirebaseauthService {
     signIn(user: User) {
-        return Promise.resolve({ user: { uid: '123' } });
+      return Promise.resolve({ user: { uid: '123' } });
     }
-
+  
     getDocument(path: string) {
-        return Promise.resolve({ name: 'Test User' });
+      return Promise.resolve({ name: 'Test User' });
     }
-}
-
-class MockUtilsService {
+  }
+  
+  class MockUtilsService {
     loading() {
-        return Promise.resolve({
-            present: () => Promise.resolve(),
-            dismiss: () => Promise.resolve()
-        });
+      return Promise.resolve({
+        present: () => Promise.resolve(),
+        dismiss: () => Promise.resolve()
+      });
     }
-
-    presentToast(options: any) { }
-
-    saveInlocalStorage(key: string, value: any) { }
-
-    routerlink(path: string) { }
-}
-
-describe('AuthPage', () => {
+  
+    presentToast(options: any) {}
+  
+    saveInlocalStorage(key: string, value: any) {}
+  
+    routerlink(path: string) {}
+  }
+  
+  fdescribe('AuthPage', () => {
     let component: AuthPage;
     let fixture: ComponentFixture<AuthPage>;
     let firebaseauthSvc: FirebaseauthService;
     let utilsSvc: UtilsService;
-
+  
     beforeEach(async () => {
-        TestBed.configureTestingModule({
-            declarations: [AuthPage],
-            imports: [IonicModule.forRoot(), ReactiveFormsModule],
-            providers: [
-                { provide: FirebaseauthService, useClass: MockFirebaseauthService },
-                { provide: UtilsService, useClass: MockUtilsService }
-            ]
-        }).compileComponents();
-
-        fixture = TestBed.createComponent(AuthPage);
-        component = fixture.componentInstance;
-        firebaseauthSvc = TestBed.inject(FirebaseauthService);
-        utilsSvc = TestBed.inject(UtilsService);
-        fixture.detectChanges();
+      TestBed.configureTestingModule({
+        declarations: [ AuthPage ],
+        imports: [IonicModule.forRoot(), ReactiveFormsModule],
+        providers: [
+          { provide: FirebaseauthService, useClass: MockFirebaseauthService },
+          { provide: UtilsService, useClass: MockUtilsService }
+        ]
+      }).compileComponents();
+  
+      fixture = TestBed.createComponent(AuthPage);
+      component = fixture.componentInstance;
+      firebaseauthSvc = TestBed.inject(FirebaseauthService);
+      utilsSvc = TestBed.inject(UtilsService);
+      fixture.detectChanges();
     });
-
+  
     it('should create', () => {
-        expect(component).toBeTruthy();
+      expect(component).toBeTruthy();
     });
-
+  
     it('should submit if form is valid', async () => {
-        spyOn(firebaseauthSvc, 'signIn').and.callThrough();
-        spyOn(component, 'getUserInfo').and.callThrough();
-
-        component.form.setValue({ email: 'test@test.com', password: 'password' });
-        await component.submit();
-
-        expect(firebaseauthSvc.signIn).toHaveBeenCalled();
-        expect(component.getUserInfo).toHaveBeenCalled();
+      spyOn(firebaseauthSvc, 'signIn').and.callThrough();
+      spyOn(component, 'getUserInfo').and.callThrough();
+  
+      component.form.setValue({ email: 'test@test.com', password: 'password' });
+      await component.submit();
+  
+      expect(firebaseauthSvc.signIn).toHaveBeenCalled();
+      expect(component.getUserInfo).toHaveBeenCalled();
     });
-
+  
     it('should get user info if form is valid', async () => {
-        spyOn(firebaseauthSvc, 'getDocument').and.callThrough();
-        spyOn(utilsSvc, 'saveInlocalStorage').and.callThrough();
-        spyOn(utilsSvc, 'routerlink').and.callThrough();
-
-        component.form.setValue({ email: 'test@test.com', password: 'password' });
-        await component.getUserInfo('123');
-
-        expect(firebaseauthSvc.getDocument).toHaveBeenCalled();
-        expect(utilsSvc.saveInlocalStorage).toHaveBeenCalled();
-        expect(utilsSvc.routerlink).toHaveBeenCalled();
+      spyOn(firebaseauthSvc, 'getDocument').and.callThrough();
+      spyOn(utilsSvc, 'saveInlocalStorage').and.callThrough();
+      spyOn(utilsSvc, 'routerlink').and.callThrough();
+  
+      component.form.setValue({ email: 'test@test.com', password: 'password' });
+      await component.getUserInfo('123');
+  
+      expect(firebaseauthSvc.getDocument).toHaveBeenCalled();
+      expect(utilsSvc.saveInlocalStorage).toHaveBeenCalled();
+      expect(utilsSvc.routerlink).toHaveBeenCalled();
     });
-});
-
+  });
